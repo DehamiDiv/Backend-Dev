@@ -4,10 +4,53 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+//user->movie->watchlist
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String
+  password String
+  
+ createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+``
+}
+
+
+model movie {
+  id String @id @default(uuid())
+  title String
+  overview String
+  releaseYear Int
+  genres String[] @default([])
+  runtime Int
+  posterUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Watchlist {
+  id String @id @default(uuid())
+  userId Int
+  movieId String
+  status String @default("pending")//pending,completed
+  rating int[]
+  notes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum WatchlistStatus {
+  PLANNED
+  WATCHING
+  COMPLETED
+  DROPPED
 }
